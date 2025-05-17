@@ -11,7 +11,7 @@ export default function Record({ image, location }: RecordProps) {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
 
-  const handleUpload = async (url: String) => {
+  const handleUpload = async (audioBlob: Blob) => {
     const formData = new FormData();
     if (image) {
       formData.append(`image`, image, `image.jpg`);
@@ -23,10 +23,7 @@ export default function Record({ image, location }: RecordProps) {
         `location.json`
       );
     }
-    if (audioUrl) {
-      const audioBlob = await fetch(audioUrl).then((res) => res.blob());
-      formData.append("audio", audioBlob, "recording.webm");
-    }
+    formData.append("audio", audioBlob, "recording.webm");
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.error("URL is not defined");
       return;
@@ -61,7 +58,7 @@ export default function Record({ image, location }: RecordProps) {
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
         stream.getTracks().forEach((track) => track.stop());
-        handleUpload(url);
+        handleUpload(audioBlob);
         navigator.vibrate(0);
       };
 
