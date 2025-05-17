@@ -12,17 +12,24 @@ export default function Record({ image, location }: RecordProps) {
   const audioChunks = useRef<Blob[]>([]);
 
   const handleUpload = async (audioBlob: Blob) => {
+    /*
+    for example
+    */
+    const earthquakeData =
+      "An earthquake has been detected in Tokyo, Japan. Please evacuate the building";
     const formData = new FormData();
     if (image) {
       formData.append(`image`, image, `image.jpg`);
     }
-    if (location) {
-      formData.append(
-        `location`,
-        new Blob([JSON.stringify(location)], { type: "application/json" }),
-        `location.json`
-      );
-    }
+    // if (location) {
+    //   formData.append(
+    //     `location`,
+    //     new Blob([JSON.stringify(location)], { type: "application/json" }),
+    //     `location.json`
+    //   );
+    // }
+    formData.append("earthquake_data", earthquakeData);
+    formData.append("user_profile", earthquakeData);
     formData.append("audio", audioBlob, "recording.webm");
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.error("URL is not defined");

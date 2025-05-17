@@ -5,11 +5,14 @@ export default function Setup() {
     "use server";
     const rawData = {
       name: formData.get("name"),
-      age: formData.get("age"),
+      dateOfBirth: formData.get("dateOfBirth"),
+      language: formData.get("language"),
+      medications: formData.get("medications"),
+      allergies: formData.get("allergies"),
+      conditions: formData.get("conditions"),
       height: formData.get("height"),
       weight: formData.get("weight"),
       bloodType: formData.get("bloodType"),
-      allergies: formData.get("allergies"),
       emergencyContacts: formData.get("emergencyContacts"),
     };
     console.log("Form data:", rawData);
@@ -41,6 +44,24 @@ export default function Setup() {
         className="w-full max-w-md space-y-4 p-6 rounded shadow"
       >
         <div>
+          <label className="block mb-1 font-medium">ID</label>
+          <input
+            type="text"
+            name="id"
+            className="w-full border rounded px-3 py-2"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Password</label>
+          <input
+            type="password"
+            name="password"
+            className="w-full border rounded px-3 py-2"
+            required
+          />
+        </div>
+        <div>
           <label className="block mb-1 font-medium">Name</label>
           <input
             type="text"
@@ -50,12 +71,48 @@ export default function Setup() {
           />
         </div>
         <div>
-          <label className="block mb-1 font-medium">Age</label>
+          <label className="block mb-1 font-medium">Date of Birth</label>
           <input
-            type="number"
-            name="age"
+            type="date"
+            name="daeOfBirth"
             className="w-full border rounded px-3 py-2"
             required
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Primary Language</label>
+          <input
+            type="text"
+            name="language"
+            className="w-full border rounded px-3 py-2"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Medications</label>
+          <textarea
+            name="medications"
+            className="w-full border rounded px-3 py-2"
+            placeholder="Medication name and dosage"
+            rows={3}
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Allergies</label>
+          <textarea
+            name="allergies"
+            className="w-full border rounded px-3 py-2"
+            placeholder="Allergy name and reaction"
+            rows={3}
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Conditions</label>
+          <textarea
+            name="conditions"
+            className="w-full border rounded px-3 py-2"
+            placeholder="Condition name and details"
+            rows={3}
           />
         </div>
         <div>
@@ -81,15 +138,6 @@ export default function Setup() {
             name="bloodType"
             className="w-full border rounded px-3 py-2"
             placeholder="e.g. O+, A-, etc."
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Allergies</label>
-          <input
-            type="text"
-            name="allergies"
-            className="w-full border rounded px-3 py-2"
-            placeholder="List allergies separated by commas"
           />
         </div>
         <div>
