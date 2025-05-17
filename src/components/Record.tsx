@@ -58,7 +58,10 @@ export default function Record({ image, location }: RecordProps) {
         setAudioUrl(url);
         stream.getTracks().forEach((track) => track.stop());
         handleUpload(url);
+        navigator.vibrate(0);
       };
+
+      navigator.vibrate(2000);
 
       mediaRecorder.start();
 
