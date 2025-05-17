@@ -27,7 +27,11 @@ export default function Record({ image, location }: RecordProps) {
       const audioBlob = await fetch(audioUrl).then((res) => res.blob());
       formData.append("audio", audioBlob, "recording.webm");
     }
-    const response = await fetch("/api/upload", {
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+      console.error("URL is not defined");
+      return;
+    }
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL, {
       method: "POST",
       body: formData,
     });

@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function Setup() {
   async function handleSubmit(formData: FormData) {
     "use server";
@@ -10,21 +12,33 @@ export default function Setup() {
       allergies: formData.get("allergies"),
       emergencyContacts: formData.get("emergencyContacts"),
     };
-    fetch("/api/setup", {
+    console.log("Form data:", rawData);
+    if (!process.env.URL) {
+      console.error("URL is not defined");
+      return;
+    }
+    const response = await fetch(process.env.URL, {
       method: "POST",
       body: JSON.stringify(rawData),
       headers: {
         "Content-Type": "application/json",
       },
     });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Setup successful:", data);
+      redirect("/setup/finish");
+    } else {
+      console.error("Setup failed:", response.statusText);
+    }
   }
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-3xl font-bold mb-4">Setup</h1>
-      <p className="mb-6">Setup your device for the evacuation</p>
       <form
         action={handleSubmit}
-        className="w-full max-w-md space-y-4 bg-white p-6 rounded shadow"
+        className="w-full max-w-md space-y-4 p-6 rounded shadow"
       >
         <div>
           <label className="block mb-1 font-medium">Name</label>
