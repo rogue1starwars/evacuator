@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { captureAndUpload } from "@/utils/captureAndUpload";
 import Record from "@/components/Record";
 
 export default function Evacuation() {
