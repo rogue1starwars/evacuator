@@ -1,47 +1,109 @@
 "use client";
 import { handleRegister } from "@/utils/actions";
 import { useActionState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 export default function Setup() {
   const [state, formAction, pending] = useActionState(handleRegister, {
     message: "",
   });
+
+  const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
+
+  const isMismatch = password !== passwordCheck;
+
+  const router = useRouter();
+
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-3xl font-bold mb-4">Register</h1>
-      {state.message && (
-        <div className="text-red-500 mb-4">{state.message}</div>
-      )}
-      <form
-        action={formAction}
-        className="w-full max-w-md space-y-4 p-6 rounded shadow"
+    <main className="flex flex-col items-center min-h-screen">
+      <div
+        onClick={() => router.back()}
+        className="relative w-full mt-[56px] mb-[12px] h-[32px]"
       >
-        <div>
-          <label className="block mb-1 font-medium">ID</label>
-          <input
-            type="text"
-            name="id"
-            className="w-full border rounded px-3 py-2"
-            required
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Password</label>
-          <input
-            type="password"
-            name="password"
-            className="w-full border rounded px-3 py-2"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full bg-blue-600 text-white py-2 rounded font-bold hover:bg-blue-700"
+        <FaArrowLeftLong className="absolute left-0 top-1/2 -translate-y-1/2 ml-6 text-[24px] text-[#5D5D5D]" />
+        <h1 className="font-gmarket font-medium text-[#5D5D5D] text-[20px] text-center">
+          Registers
+        </h1>
+      </div>
+
+      <div className="w-full flex-grow bg-[#F7F7F7] p-6">
+        <p className="text-[20px] text-[#5D5D5D] mt-[24px]">
+          Account Information
+        </p>
+        {state.message && (
+          <div className="text-red-500 mb-4">{state.message}</div>
+        )}
+        <form
+          action={formAction}
+          className="space-y-6 mt-[24px] p-[16px] bg-white rounded-[8px]"
         >
-          Save
-        </button>
-      </form>
+          <div className="flex justify-between border-b border-b-[#CCC] py-2">
+            <span className="text-[#5D5D5D] font-medium">Name</span>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              className="text-blue-600 text-right bg-transparent outline-none"
+              required
+            />
+          </div>
+
+          <div className="flex justify-between border-b border-b-[#CCC] py-2">
+            <span className="text-[#5D5D5D] font-medium">ID</span>
+            <input
+              type="text"
+              name="id"
+              placeholder="Your ID"
+              className="text-blue-600 text-right bg-transparent outline-none"
+              required
+            />
+          </div>
+
+          <div className="flex justify-between border-b border-b-[#CCC] py-2">
+            <span className="text-[#5D5D5D] font-medium">Password</span>
+            <input
+              type="password"
+              name="password"
+              placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="text-blue-600 text-right bg-transparent outline-none"
+              required
+            />
+          </div>
+
+          <div className="flex justify-between border-b border-b-[#CCC] py-2">
+            <span className="text-[#5D5D5D] font-medium">Password Check</span>
+            <input
+              type="password"
+              name="passwordCheck"
+              placeholder="********"
+              value={passwordCheck}
+              onChange={(e) => setPasswordCheck(e.target.value)}
+              className="text-blue-600 text-right bg-transparent outline-none"
+              required
+            />
+          </div>
+
+          {isMismatch && (
+            <p className="text-red-500 text-sm text-right">
+              Passwords do not match.
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={pending || isMismatch}
+            className="w-full mt-4 bg-[#4285F4] text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            Save
+          </button>
+        </form>
+      </div>
     </main>
   );
 }
