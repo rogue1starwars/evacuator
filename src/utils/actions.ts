@@ -1,19 +1,20 @@
 "use server";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export async function handleMedicalInfo(prev: any, formData: FormData) {
   // Convert formData values to strings to avoid null values
   const rawData = {
-    name: formData.get("name"),
-    dateOfBirth: formData.get("dateOfBirth"),
-    language: formData.get("language"),
-    medications: formData.get("medications"),
+    // name: formData.get("name"),
+    age: formData.get("age"),
+    // language: formData.get("language"),
+    // medications: formData.get("medications"),
     allergies: formData.get("allergies"),
-    conditions: formData.get("conditions"),
+    // conditions: formData.get("conditions"),
     height: formData.get("height"),
     weight: formData.get("weight"),
     bloodType: formData.get("bloodType"),
-    emergencyContacts: formData.get("emergencyContacts"),
+    // emergencyContacts: formData.get("emergencyContacts"),
   };
 
   console.log("Form data:", rawData);
@@ -22,12 +23,17 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
   // TODO change endpoint
   const endpoint = new URL("api/auth/register", baseUrl);
   console.log(endpoint.toString());
+
+  const coockiesStore = await cookies();
+  const token = coockiesStore.get("token");
+  console.log("Cookies:", coockiesStore.get("token"));
   try {
     const response = await fetch(endpoint.toString(), {
       method: "POST",
       body: JSON.stringify(rawData),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Use the token from the previous step
       },
     });
 
@@ -61,7 +67,7 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
 export async function handleRegister(prev: any, formData: FormData) {
   // Convert formData values to strings to avoid null values
   const rawData = {
-    name: String(formData.get("name") || ""),
+    name: "name", // Required by your API, based on your curl command
     id: String(formData.get("id") || ""),
     password: String(formData.get("password") || ""),
   };
@@ -71,6 +77,7 @@ export async function handleRegister(prev: any, formData: FormData) {
   const baseUrl = process.env.URL;
   const endpoint = new URL("api/auth/register", baseUrl);
   console.log(endpoint.toString());
+
   try {
     const response = await fetch(endpoint.toString(), {
       method: "POST",
@@ -82,20 +89,30 @@ export async function handleRegister(prev: any, formData: FormData) {
 
     console.log("Response status:", response.status);
 
-    // Get the actual error message from the response
-    const responseBody = await response.text();
-    console.log("Response body:", responseBody);
-
-    if (response.ok) {
-      console.log("Setup successful");
-      redirect("/setup/medicals");
-    } else {
-      console.error(`Setup failed: ${response.status} - ${responseBody}`);
+    // First check if response is OK before consuming the body
+    if (!response.ok) {
+      // If not OK, then get error text
+      const errorText = await response.text();
+      console.error(`Setup failed: ${response.status} - ${errorText}`);
       return {
-        message: `Setup failed: ${response.status} - ${responseBody}`,
+        message: `Setup failed: ${response.status} - ${errorText}`,
       };
-      // throw new Error(`${response.status} - ${responseBody}`);
     }
+
+    // Only parse JSON for successful responses
+    const responseData = await response.json();
+    console.log("Setup successful", responseData);
+
+    // Store the token in cookies
+    const cookiesStore = await cookies();
+    cookiesStore.set({
+      name: "token",
+      value: responseData.token || "", // Get actual token from response
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
   } catch (error) {
     console.error("Request error:", error);
     return {
@@ -103,6 +120,8 @@ export async function handleRegister(prev: any, formData: FormData) {
         error instanceof Error ? error.message : "An unknown error occurred"
       }`,
     };
-    // throw new Error(error instanceof Error ? error.message : 'An unknown error occurred');
+  } finally {
+    // Redirect to the next page
+    redirect("/setup/medicals");
   }
 }
