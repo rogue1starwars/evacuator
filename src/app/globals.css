@@ -23,6 +23,27 @@
   }
 }
 
+@font-face {
+  font-family: "GmarketSans";
+  font-weight: 300;
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2101@1.0/GmarketSansLight.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: "GmarketSans";
+  font-weight: 500;
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
+}
+
+@font-face {
+  font-family: "GmarketSans";
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff")
+    format("woff");
+}
+
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "GmarketSans", sans-serif;
 }
