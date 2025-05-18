@@ -21,15 +21,13 @@ export default function Record({ image, location }: RecordProps) {
     if (image) {
       formData.append(`image`, image, `image.jpg`);
     }
-    // if (location) {
-    //   formData.append(
-    //     `location`,
-    //     new Blob([JSON.stringify(location)], { type: "application/json" }),
-    //     `location.json`
-    //   );
-    // }
-    formData.append("earthquake_data", earthquakeData);
-    formData.append("user_profile", earthquakeData);
+    if (location) {
+      formData.append(
+        `location`,
+        new Blob([JSON.stringify(location)], { type: "application/json" }),
+        `location.json`
+      );
+    }
     formData.append("audio", audioBlob, "recording.webm");
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.error("URL is not defined");
@@ -95,9 +93,9 @@ export default function Record({ image, location }: RecordProps) {
         } text-white text-4xl font-bold`}
         style={{
           width: "70vw",
-          height: "70vw",
-          maxWidth: "70vh",
-          maxHeight: "70vh",
+          height: "70vh",
+          // maxWidth: "70vh",
+          // maxHeight: "70vh",
           minWidth: "200px",
           minHeight: "200px",
         }}
