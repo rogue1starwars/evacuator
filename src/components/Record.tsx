@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { getCookie } from "cookies-next";
 
 interface RecordProps {
   image: Blob | null;
@@ -30,16 +31,26 @@ export default function Record({ image, location }: RecordProps) {
     }
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     const endpoint = new URL("api/disaster/prompt", baseUrl);
-    const response = await fetch(endpoint.toString(), {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const token = getCookie("token");
+      const response = await fetch(endpoint.toString(), {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+        method: "POST",
+        body: formData,
+      });
 
-    const responseText = await response.text();
-    console.log("Upload response:", responseText);
+      const responseText = await response.text();
+      console.log("Upload response:", responseText);
 
-    const utterance = new window.SpeechSynthesisUtterance(responseText);
-    window.speechSynthesis.speak(utterance);
+      const utterance = new window.SpeechSynthesisUtterance(responseText);
+      window.speechSynthesis.speak(utterance);
+    } catch (error) {
+      console.error("Error uploading audio:", error);
+      return;
+    }
   };
   const handleRecord = async () => {
     if (!recording) {
