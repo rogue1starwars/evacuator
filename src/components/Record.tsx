@@ -12,11 +12,6 @@ export default function Record({ image, location }: RecordProps) {
   const audioChunks = useRef<Blob[]>([]);
 
   const handleUpload = async (audioBlob: Blob) => {
-    /*
-    for example
-    */
-    const earthquakeData =
-      "An earthquake has been detected in Tokyo, Japan. Please evacuate the building";
     const formData = new FormData();
     if (image) {
       formData.append(`image`, image, `image.jpg`);
@@ -28,12 +23,14 @@ export default function Record({ image, location }: RecordProps) {
         `location.json`
       );
     }
-    formData.append("audio", audioBlob, "recording.webm");
+    formData.append("voice", audioBlob, "recording.webm");
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.error("URL is not defined");
       return;
     }
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const endpoint = new URL("api/disaster/prompt", baseUrl);
+    const response = await fetch(endpoint.toString(), {
       method: "POST",
       body: formData,
     });

@@ -1,54 +1,19 @@
-import { redirect } from "next/navigation";
+"use client";
+import { handleRegister } from "@/utils/actions";
+import { useActionState } from "react";
 
 export default function Setup() {
-  async function handleSubmit(formData: FormData) {
-    "use server";
-
-    // Convert formData values to strings to avoid null values
-    const rawData = {
-      name: String(formData.get("name") || ""),
-      id: String(formData.get("id") || ""),
-      password: String(formData.get("password") || ""),
-    };
-
-    console.log("Form data:", rawData);
-
-    try {
-      const response = await fetch(
-        "http://34.146.150.72:8081/api/auth/register",
-        {
-          method: "POST",
-          body: JSON.stringify(rawData),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Response status:", response.status);
-
-      // Get the actual error message from the response
-      const responseBody = await response.text();
-      console.log("Response body:", responseBody);
-
-      if (response.ok) {
-        console.log("Setup successful");
-        redirect("/setup/medicals");
-      } else {
-        console.error(`Setup failed: ${response.status} - ${responseBody}`);
-        // throw new Error(`${response.status} - ${responseBody}`);
-      }
-    } catch (error) {
-      console.error("Request error:", error);
-      // throw new Error(error instanceof Error ? error.message : 'An unknown error occurred');
-    }
-  }
-
+  const [state, formAction, pending] = useActionState(handleRegister, {
+    message: "",
+  });
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-3xl font-bold mb-4">Register</h1>
+      {state.message && (
+        <div className="text-red-500 mb-4">{state.message}</div>
+      )}
       <form
-        action={handleSubmit}
+        action={formAction}
         className="w-full max-w-md space-y-4 p-6 rounded shadow"
       >
         <div>
@@ -80,6 +45,7 @@ export default function Setup() {
         </div>
         <button
           type="submit"
+          disabled={pending}
           className="w-full bg-blue-600 text-white py-2 rounded font-bold hover:bg-blue-700"
         >
           Save

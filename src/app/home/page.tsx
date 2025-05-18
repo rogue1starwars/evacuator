@@ -70,10 +70,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Link
-        href="#"
-        className="mt-4 text-[#4285F4] text-[18px] hover:underline"
-      >
+      <Link href="setup" className="mt-6 text-blue-600 text-sm hover:underline">
         Create an account
       </Link>
     </main>
