@@ -52,7 +52,6 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
 
     if (response.ok) {
       console.log("Setup successful");
-      redirect("/setup/medicals");
     } else {
       console.error(`Setup failed: ${response.status} - ${responseBody}`);
       return {
@@ -68,6 +67,8 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
       }`,
     };
     // throw new Error(error instanceof Error ? error.message : 'An unknown error occurred');
+  } finally {
+    redirect("/evacuation");
   }
 }
 
