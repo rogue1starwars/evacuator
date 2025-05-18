@@ -1,50 +1,20 @@
-import { redirect } from "next/navigation";
+"use client";
+import { handleMedicalInfo } from "@/utils/actions";
+import { useActionState } from "react";
 
 export default function Medicals() {
-  async function handleSubmit(formData: FormData) {
-    "use server";
-    const rawData = {
-      name: formData.get("name"),
-      dateOfBirth: formData.get("dateOfBirth"),
-      language: formData.get("language"),
-      medications: formData.get("medications"),
-      allergies: formData.get("allergies"),
-      conditions: formData.get("conditions"),
-      height: formData.get("height"),
-      weight: formData.get("weight"),
-      bloodType: formData.get("bloodType"),
-      emergencyContacts: formData.get("emergencyContacts"),
-    };
-    console.log("Form data:", rawData);
-    if (!process.env.URL) {
-      console.error("URL is not defined");
-      return;
-    }
-    const response = await fetch(
-      `http://34.146.150.72:8081/api/auth/register`,
-      {
-        method: "POST",
-        body: JSON.stringify(rawData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  const [state, formAction, pending] = useActionState(handleMedicalInfo, {
+    message: "",
+  });
 
-    console.log(response);
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Setup successful:", data);
-      redirect("/setup/finish");
-    } else {
-      console.error("Setup failed:", response.statusText);
-    }
-  }
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-3xl font-bold mb-4">Add Information</h1>
+      {state.message && (
+        <div className="text-red-500 mb-4">{state.message}</div>
+      )}
       <form
-        action={handleSubmit}
+        action={formAction}
         className="w-full max-w-md space-y-4 p-6 rounded shadow"
       >
         <div>
@@ -137,6 +107,7 @@ export default function Medicals() {
         </div>
         <button
           type="submit"
+          disabled={pending}
           className="w-full bg-blue-600 text-white py-2 rounded font-bold hover:bg-blue-700"
         >
           Save
