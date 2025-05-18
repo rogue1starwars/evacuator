@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-import { getCookie } from "cookies-next";
+import { getCookie, getCookies } from "cookies-next";
+import Cookies from "js-cookie";
 
 interface RecordProps {
   image: Blob | null;
@@ -29,15 +30,8 @@ export default function Record({ image, location }: RecordProps) {
       console.error("URL is not defined");
       return;
     }
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-    const endpoint = new URL("api/disaster/prompt", baseUrl);
     try {
-      const token = getCookie("token");
-      const response = await fetch(endpoint.toString(), {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await fetch("/api", {
         method: "POST",
         body: formData,
       });
