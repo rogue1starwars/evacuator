@@ -21,11 +21,18 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
 
   const baseUrl = process.env.URL;
   // TODO change endpoint
-  const endpoint = new URL("api/auth/register", baseUrl);
+  const endpoint = new URL("api/medical/update", baseUrl);
   console.log(endpoint.toString());
 
   const coockiesStore = await cookies();
   const token = coockiesStore.get("token");
+  if (!token) {
+    console.error("Token not found in cookies");
+    return {
+      message: "Token not found in cookies",
+    };
+  }
+  console.log(`Token: ${token.value}`);
   console.log("Cookies:", coockiesStore.get("token"));
   try {
     const response = await fetch(endpoint.toString(), {
@@ -33,7 +40,7 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
       body: JSON.stringify(rawData),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Use the token from the previous step
+        Authorization: `Bearer ${token.value}`,
       },
     });
 
