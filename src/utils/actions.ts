@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 export async function handleMedicalInfo(prev: any, formData: FormData) {
   // Convert formData values to strings to avoid null values
+  let redirectTo = "";
   const rawData = {
     // name: formData.get("name"),
     age: formData.get("age"),
@@ -52,6 +53,7 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
 
     if (response.ok) {
       console.log("Setup successful");
+      redirectTo = "/evacuation";
     } else {
       console.error(`Setup failed: ${response.status} - ${responseBody}`);
       return {
@@ -67,12 +69,18 @@ export async function handleMedicalInfo(prev: any, formData: FormData) {
       }`,
     };
     // throw new Error(error instanceof Error ? error.message : 'An unknown error occurred');
-  } finally {
-    redirect("/evacuation");
+  }
+  if (redirectTo) {
+    redirect(redirectTo);
+  } else {
+    return {
+      message: "Redirect failed",
+    };
   }
 }
 
 export async function handleRegister(prev: any, formData: FormData) {
+  let redirectTo = "";
   // Convert formData values to strings to avoid null values
   const rawData = {
     name: "name", // Required by your API, based on your curl command
@@ -121,6 +129,7 @@ export async function handleRegister(prev: any, formData: FormData) {
       sameSite: "strict",
       path: "/",
     });
+    redirectTo = "/setup/medicals";
   } catch (error) {
     console.error("Request error:", error);
     return {
@@ -128,8 +137,12 @@ export async function handleRegister(prev: any, formData: FormData) {
         error instanceof Error ? error.message : "An unknown error occurred"
       }`,
     };
-  } finally {
-    // Redirect to the next page
-    redirect("/setup/medicals");
+  }
+  if (redirectTo) {
+    redirect(redirectTo);
+  } else {
+    return {
+      message: "Redirect failed",
+    };
   }
 }
