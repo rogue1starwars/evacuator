@@ -14,30 +14,46 @@ export async function POST(request: Request) {
       },
     });
   }
-  console.log(`Token: ${token}`);
 
   // Get the request body
   const formData = await request.formData();
 
-  // Forward the request to the actual API
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/disaster/prompt";
+  try {
+    // Make the API request
+    const response = await fetch("http://35.190.225.106:8000/gemini/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: '{"prompt": "Attention. A strong earthquake has occurred nearby. You are in a high-risk zone. Because of your limited mobility and heart condition, do not attempt to evacuate on your own. Stay away from windows and heavy furniture. If possible, move under a sturdy table or brace yourself against an interior wall. Help is on the way. Please remain calm and wait for emergency responders to arrive. This is a life-threatening situation. Stay alert and follow safety instructions"}',
+    });
 
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      // Automatically set by fetch with formData
-      // Add the token from the server-side cookie
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
+    // Check if the response is OK
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
+      return new Response(`API error: ${response.status}`, {
+        status: response.status,
+      });
+    }
 
-  // Return the response from the API
-  const data = await response.text();
-  return new Response(data, {
-    status: response.status,
-    headers: {
-      "Content-Type": response.headers.get("Content-Type") || "text/plain",
-    },
-  });
+    // Parse the JSON response
+    const jsonResponse = await response.json();
+    console.log("API response:", jsonResponse);
+
+    // Extract the ai_response field
+    const aiResponse = jsonResponse.ai_response;
+
+    // Return just the AI response text
+    return new Response(aiResponse, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    return new Response("Error processing request", {
+      status: 500,
+    });
+  }
 }

@@ -18,13 +18,26 @@ export default function Record({ image, location }: RecordProps) {
     if (image) {
       formData.append(`image`, image, `image.jpg`);
     }
-    if (location) {
-      formData.append(
-        `location`,
-        new Blob([JSON.stringify(location)], { type: "application/json" }),
-        `location.json`
-      );
-    }
+    // if (location) {
+    //   // Create a formatted location object with ISO timestamp
+    //   const formattedLocation = {
+    //     latitude: location.latitude,
+    //     longitude: location.longitude,
+    //     // Convert timestamp (number) to ISO string format
+    //     timestamp: new Date(location.timestamp).toISOString(),
+    //   };
+
+    //   // Convert the formatted location to a JSON string
+    //   const locationJson = JSON.stringify(formattedLocation);
+
+    //   // Create a Blob from the JSON string
+    //   const locationBlob = new Blob([locationJson], {
+    //     type: "application/json",
+    //   });
+
+    //   // Append the Blob to FormData
+    //   formData.append("location", locationJson);
+    // }
     formData.append("voice", audioBlob, "recording.webm");
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.error("URL is not defined");
