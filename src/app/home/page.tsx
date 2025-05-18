@@ -40,21 +40,21 @@ export default function Home() {
           <div className="space-y-2 mt-[24px]">
             <input
               type="text"
-              placeholder="Email"
+              placeholder="ID"
               value={id}
               onChange={(e) => setId(e.target.value)}
-              className="w-full px-3 py-3 bg-white border-[2px] border-[#CCC] rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="cursor-pointer w-full px-3 py-3 bg-white border-[2px] border-[#CCC] rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-3 bg-white border-[2px] border-[#CCC] rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="cursor-pointer w-full px-3 py-3 bg-white border-[2px] border-[#CCC] rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
-          <button className="w-full flex items-center justify-center mt-3 bg-[#4285F4] text-white py-2 rounded hover:bg-blue-600">
+          <button className="w-full flex items-center justify-center mt-3 bg-[#4285F4] text-white py-2 rounded hover:bg-[#3367D6]">
             Sign in
           </button>
 
@@ -70,7 +70,10 @@ export default function Home() {
         </div>
       </div>
 
-      <Link href="setup" className="mt-6 text-blue-600 text-sm hover:underline">
+      <Link
+        href="setup"
+        className="mt-6 text-blue-600 text-sm cursor-pointer hover:text-[#5D5D5D]"
+      >
         Create an account
       </Link>
     </main>

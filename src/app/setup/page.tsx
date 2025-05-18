@@ -24,9 +24,9 @@ export default function Setup() {
         onClick={() => router.back()}
         className="relative w-full mt-[56px] mb-[12px] h-[32px]"
       >
-        <FaArrowLeftLong className="absolute left-0 top-1/2 -translate-y-1/2 ml-6 text-[24px] text-[#5D5D5D]" />
+        <FaArrowLeftLong className="absolute left-0 top-1/2 -translate-y-1/2 ml-6 text-[36px] text-[#5D5D5D] cursor-pointer hover:bg-[#F0F0F0] p-2 rounded-full" />
         <h1 className="font-gmarket font-medium text-[#5D5D5D] text-[20px] text-center">
-          Registers
+          Add Information
         </h1>
       </div>
 
@@ -47,7 +47,7 @@ export default function Setup() {
               type="text"
               name="name"
               placeholder="Name"
-              className="text-blue-600 text-right bg-transparent outline-none"
+              className="text-blue-600 text-right bg-transparent outline-none cursor-pointer"
               required
             />
           </div>
@@ -58,7 +58,7 @@ export default function Setup() {
               type="text"
               name="id"
               placeholder="Your ID"
-              className="text-blue-600 text-right bg-transparent outline-none"
+              className="text-blue-600 text-right bg-transparent outline-none cursor-pointer"
               required
             />
           </div>
@@ -71,7 +71,7 @@ export default function Setup() {
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="text-blue-600 text-right bg-transparent outline-none"
+              className="text-blue-600 text-right bg-transparent outline-none cursor-pointer"
               required
             />
           </div>
@@ -84,7 +84,7 @@ export default function Setup() {
               placeholder="********"
               value={passwordCheck}
               onChange={(e) => setPasswordCheck(e.target.value)}
-              className="text-blue-600 text-right bg-transparent outline-none"
+              className="text-blue-600 text-right bg-transparent outline-none cursor-pointer"
               required
             />
           </div>
@@ -98,7 +98,7 @@ export default function Setup() {
           <button
             type="submit"
             disabled={pending || isMismatch}
-            className="w-full mt-4 bg-[#4285F4] text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="w-full mt-4 bg-[#4285F4] text-white py-2 rounded hover:bg-[#3367D6] disabled:opacity-50 cursor-pointer"
           >
             Save
           </button>

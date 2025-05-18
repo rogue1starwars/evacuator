@@ -87,17 +87,15 @@ export default function Record({ image, location }: RecordProps) {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen w-screen">
+    <div className="flex items-center justify-center w-screen">
       <button
         onClick={handleRecord}
         className={`flex items-center justify-center rounded-full ${
           recording ? "bg-red-500" : "bg-green-500"
-        } text-white text-4xl font-bold`}
+        } text-white text-[32px] font-bold`}
         style={{
-          width: "70vw",
-          height: "70vh",
-          // maxWidth: "70vh",
-          // maxHeight: "70vh",
+          width: "240px",
+          height: "240px",
           minWidth: "200px",
           minHeight: "200px",
         }}

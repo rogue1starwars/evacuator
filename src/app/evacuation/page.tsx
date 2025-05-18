@@ -2,11 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import Record from "@/components/Record";
+import { useRouter } from "next/navigation";
+
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 export default function Evacuation() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const interval = 5000;
+
+  const router = useRouter();
 
   // State for captured images and locations
   const [image, setImage] = useState<Blob | null>(null);
@@ -70,7 +75,18 @@ export default function Evacuation() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col h-screen">
+      <div
+        onClick={() => router.back()}
+        className="relative w-full mt-[56px] mb-[12px] h-[32px]"
+      >
+        <FaArrowLeftLong className="absolute left-0 top-1/2 -translate-y-1/2 ml-6 text-[36px] text-[#5D5D5D] cursor-pointer hover:bg-[#F0F0F0] p-2 rounded-full" />
+        <h1 className="font-gmarket font-medium text-[#5D5D5D] text-[20px] text-center">
+          Navigation
+        </h1>
+      </div>
+      <div className="w-full h-px bg-[#CCC] mb-[200px]"></div>
+
       <video ref={videoRef} className="hidden mb-4" />
       <canvas ref={canvasRef} className="hidden" />
       <Record image={image} location={location} />
